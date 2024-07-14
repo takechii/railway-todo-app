@@ -4,7 +4,7 @@ import { useCookies } from 'react-cookie';
 import { useNavigate } from 'react-router-dom';
 import { Header } from '../components/Header';
 import { url } from '../const';
-import './newTask.css';
+import './newTask.scss';
 
 export const NewTask = () => {
   const [title, setTitle] = useState('');

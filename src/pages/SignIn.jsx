@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { signIn } from '../authSlice';
 import { Header } from '../components/Header';
 import { url } from '../const';
-import './signin.css';
+import './signin.scss';
 
 export const SignIn = () => {
   const navigate = useNavigate();

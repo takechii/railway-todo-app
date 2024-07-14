@@ -4,7 +4,7 @@ import { useCookies } from 'react-cookie';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Header } from '../components/Header';
 import { url } from '../const';
-import './editTask.css';
+import './editTask.scss';
 
 export const EditTask = () => {
   const { listId, taskId } = useParams();
