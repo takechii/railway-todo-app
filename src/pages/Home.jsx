@@ -1,19 +1,21 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
-import PropTypes from 'prop-types';
 import { useCookies } from 'react-cookie';
 import axios from 'axios';
 import { Header } from '../components/Header';
 import { url } from '../const';
+import Tasks from '../components/Tasks';
 import './home.scss';
 
 export const Home = () => {
-  const [isDoneDisplay, setIsDoneDisplay] = useState('todo'); // todo->未完了 done->完了
+  const [isDoneDisplay, setIsDoneDisplay] = useState('todo');
   const [lists, setLists] = useState([]);
   const [selectListId, setSelectListId] = useState();
   const [tasks, setTasks] = useState([]);
   const [errorMessage, setErrorMessage] = useState('');
   const [cookies] = useCookies();
+  const listRefs = useRef([]);
+
   const handleIsDoneDisplayChange = (e) => setIsDoneDisplay(e.target.value);
 
   useEffect(() => {
@@ -25,6 +27,9 @@ export const Home = () => {
       })
       .then((res) => {
         setLists(res.data);
+        if (res.data.length > 0) {
+          setSelectListId(res.data[0].id);
+        }
       })
       .catch((err) => {
         setErrorMessage(`リストの取得に失敗しました。${err}`);
@@ -32,11 +37,9 @@ export const Home = () => {
   }, [cookies.token]);
 
   useEffect(() => {
-    const listId = lists[0]?.id;
-    if (typeof listId !== 'undefined') {
-      setSelectListId(listId);
+    if (selectListId) {
       axios
-        .get(`${url}/lists/${listId}/tasks`, {
+        .get(`${url}/lists/${selectListId}/tasks`, {
           headers: {
             authorization: `Bearer ${cookies.token}`,
           },
@@ -48,22 +51,31 @@ export const Home = () => {
           setErrorMessage(`タスクの取得に失敗しました。${err}`);
         });
     }
-  }, [lists, cookies.token]);
+  }, [selectListId, cookies.token]);
+
+  useEffect(() => {
+    if (listRefs.current.length > 0) {
+      listRefs.current[0].focus();
+    }
+  }, [lists]);
 
   const handleSelectList = (id) => {
     setSelectListId(id);
-    axios
-      .get(`${url}/lists/${id}/tasks`, {
-        headers: {
-          authorization: `Bearer ${cookies.token}`,
-        },
-      })
-      .then((res) => {
-        setTasks(res.data.tasks);
-      })
-      .catch((err) => {
-        setErrorMessage(`タスクの取得に失敗しました。${err}`);
-      });
+  };
+
+  const handleKeyDown = (e, index) => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault(); // デフォルトの挙動を防ぐ
+      handleSelectList(lists[index].id);
+    } else if (e.key === 'ArrowRight') {
+      e.preventDefault();
+      const nextIndex = (index + 1) % lists.length;
+      listRefs.current[nextIndex].focus();
+    } else if (e.key === 'ArrowLeft') {
+      e.preventDefault();
+      const prevIndex = (index - 1 + lists.length) % lists.length;
+      listRefs.current[prevIndex].focus();
+    }
   };
 
   return (
@@ -85,14 +97,20 @@ export const Home = () => {
               </p>
             </div>
           </div>
-          <ul className="list-tab">
-            {lists.map((list, key) => {
+          <ul className="list-tab" role="tablist">
+            {lists.map((list, index) => {
               const isActive = list.id === selectListId;
               return (
                 <li
-                  key={key}
+                  key={index}
                   className={`list-tab-item ${isActive ? 'active' : ''}`}
                   onClick={() => handleSelectList(list.id)}
+                  onKeyDown={(e) => handleKeyDown(e, index)}
+                  tabIndex="0"
+                  role="tab"
+                  aria-selected={isActive}
+                  aria-label={list.title}
+                  ref={(el) => (listRefs.current[index] = el)}
                 >
                   {list.title}
                 </li>
@@ -113,72 +131,18 @@ export const Home = () => {
                 <option value="done">完了</option>
               </select>
             </div>
-            <Tasks
-              tasks={tasks}
-              selectListId={selectListId}
-              isDoneDisplay={isDoneDisplay}
-            />
+            {selectListId && tasks ? (
+              <Tasks
+                tasks={tasks}
+                selectListId={selectListId}
+                isDoneDisplay={isDoneDisplay}
+              />
+            ) : (
+              <p>タスクを選択してください。</p>
+            )}
           </div>
         </div>
       </main>
     </div>
   );
-};
-
-// 表示するタスク
-const Tasks = (props) => {
-  const { tasks, selectListId, isDoneDisplay } = props;
-  if (tasks === null) return <></>;
-
-  if (isDoneDisplay === 'done') {
-    return (
-      <ul>
-        {tasks
-          .filter((task) => task.done)
-          .map((task, key) => (
-            <li key={key} className="task-item">
-              <Link
-                to={`/lists/${selectListId}/tasks/${task.id}`}
-                className="task-item-link"
-              >
-                {task.title}
-                <br />
-                {task.done ? '完了' : '未完了'}
-              </Link>
-            </li>
-          ))}
-      </ul>
-    );
-  }
-
-  return (
-    <ul>
-      {tasks
-        .filter((task) => !task.done)
-        .map((task, key) => (
-          <li key={key} className="task-item">
-            <Link
-              to={`/lists/${selectListId}/tasks/${task.id}`}
-              className="task-item-link"
-            >
-              {task.title}
-              <br />
-              {task.done ? '完了' : '未完了'}
-            </Link>
-          </li>
-        ))}
-    </ul>
-  );
-};
-
-Tasks.propTypes = {
-  tasks: PropTypes.arrayOf(
-    PropTypes.shape({
-      id: PropTypes.number.isRequired,
-      title: PropTypes.string.isRequired,
-      done: PropTypes.bool.isRequired,
-    }),
-  ).isRequired,
-  selectListId: PropTypes.number.isRequired,
-  isDoneDisplay: PropTypes.string.isRequired,
 };

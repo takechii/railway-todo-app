@@ -4,12 +4,15 @@
   width: 500px;
   margin: 0 auto;
 }
+
 .signup-form {
   margin: 25px 0;
   color: #555555;
 }
 
-.email-input, .name-input, .password-input {
+.email-input,
+.name-input,
+.password-input {
   width: 100%;
   font-size: large;
   height: 30px;
@@ -17,7 +20,7 @@
 }
 
 .signup-button {
-  background-color: #242F9B;
+  background-color: #242f9b;
   color: #ffffff;
   width: 100px;
   height: 40px;
@@ -26,4 +29,44 @@
 
 .error-message {
   color: #ff3333;
+}
+
+/* タブレット対応 */
+@media (max-width: 768px) {
+  .signup {
+    width: 80%;
+    margin: 20px auto;
+  }
+
+  .email-input,
+  .name-input,
+  .password-input {
+    height: 35px;
+  }
+
+  .signup-button {
+    width: 100px;
+    height: 45px;
+  }
+}
+
+/* スマホ対応 */
+@media (max-width: 320px) {
+  .signup {
+    width: 95%;
+    margin: 10px auto;
+  }
+
+  .email-input,
+  .name-input,
+  .password-input {
+    font-size: medium;
+    height: 40px;
+  }
+
+  .signup-button {
+    width: 100%;
+    height: 50px;
+    margin: 15px 0;
+  }
 }

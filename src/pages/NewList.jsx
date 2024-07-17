@@ -4,7 +4,7 @@ import { useCookies } from 'react-cookie';
 import { useNavigate } from 'react-router-dom';
 import { Header } from '../components/Header';
 import { url } from '../const';
-import './newList.css';
+import './newList.scss';
 
 export const NewList = () => {
   const [title, setTitle] = useState('');

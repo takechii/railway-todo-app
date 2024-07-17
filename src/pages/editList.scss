@@ -34,3 +34,40 @@
 .error-message {
   color: #ff3333;
 }
+
+/* タブレット対応 */
+@media (max-width: 768px) {
+  .edit-list {
+    width: 90%;
+    margin: 20px auto;
+  }
+
+  .edit-list-title {
+    width: 80%;
+  }
+
+  .delete-list-button,
+  .edit-list-button {
+    width: 100px;
+    height: 45px;
+  }
+}
+
+/* スマホ対応 */
+@media (max-width: 320px) {
+  .edit-list {
+    width: 95%;
+    margin: 10px auto;
+  }
+
+  .edit-list-title {
+    width: 100%;
+  }
+
+  .delete-list-button,
+  .edit-list-button {
+    width: 100%;
+    height: 50px;
+    margin: 15px 0;
+  }
+}

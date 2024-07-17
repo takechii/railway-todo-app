@@ -25,13 +25,20 @@
   padding: 0 25px;
   text-overflow: normal;
   margin-right: 5px;
-  border: solid 1px #242F9B;
+  border: solid 1px #242f9b;
   justify-content: center;
   align-items: center;
+  cursor: pointer; /* カーソルをポインタに変更 */
+  outline: none; /* フォーカス時のアウトラインを非表示に */
+  display: flex; /* 要素を中央に配置 */
+}
+
+.list-tab-item:focus {
+  background-color: #ddd; /* フォーカス時の背景色を調整 */
 }
 
 .active {
-  background-color: #242F9B;
+  background-color: #242f9b;
   color: #ffffff;
 }
 
@@ -73,4 +80,69 @@
 
 .display-select {
   width: 100%;
+}
+
+/* タブレット対応 */
+@media (max-width: 768px) {
+  .taskList {
+    width: 90%;
+    margin: 20px auto;
+  }
+
+  .list-header,
+  .tasks-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .list-menu {
+    text-align: left;
+  }
+
+  .list-tab-item {
+    width: 80px;
+    padding: 0 10px;
+  }
+
+  .task-item {
+    font-size: medium;
+  }
+}
+
+/* スマホ対応 */
+@media (max-width: 320px) {
+  .taskList {
+    width: 95%;
+    margin: 10px auto;
+  }
+
+  .list-header,
+  .tasks-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .list-menu {
+    text-align: left;
+  }
+
+  .list-tab-item {
+    width: 70px;
+    padding: 0 5px;
+  }
+
+  .task-item {
+    font-size: small;
+    height: auto;
+    padding: 10px;
+  }
+
+  .display-select-wrapper {
+    width: 80px;
+    margin: 0 0 10px auto;
+  }
+
+  .display-select {
+    width: 100%;
+  }
 }

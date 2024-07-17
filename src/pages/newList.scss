@@ -1,52 +1,39 @@
 @charset "utf-8";
 
-.signin {
-  width: 500px;
+.new-list {
+  width: 1000px;
   margin: 0 auto;
 }
 
-.signin-form {
-  margin: 25px 0;
-}
-
-.email-label,
-.password-label {
+.new-list-form {
   color: #555555;
 }
 
-.email-input,
-.password-input {
-  width: 100%;
-  font-size: large;
-  height: 30px;
+.new-list-title {
+  width: 300px;
   margin-bottom: 25px;
 }
 
-.signin-button {
+.new-list-button {
   background-color: #242f9b;
   color: #ffffff;
-  width: 100px;
+  width: 80px;
   height: 40px;
   border-radius: 5px;
 }
 
-.error-message {
-  color: #ff3333;
-}
-
 /* タブレット対応 */
 @media (max-width: 768px) {
-  .signin {
-    width: 80%;
+  .new-list {
+    width: 90%;
     margin: 20px auto;
   }
 
-  .email-input,
-  .password-input {
-    height: 35px;
+  .new-list-title {
+    width: 80%;
   }
 
-  .signin-button {
+  .new-list-button {
     width: 100px;
     height: 45px;
   }
@@ -54,18 +41,16 @@
 
 /* スマホ対応 */
 @media (max-width: 320px) {
-  .signin {
+  .new-list {
     width: 95%;
     margin: 10px auto;
   }
 
-  .email-input,
-  .password-input {
-    font-size: medium;
-    height: 40px;
+  .new-list-title {
+    width: 100%;
   }
 
-  .signin-button {
+  .new-list-button {
     width: 100%;
     height: 50px;
     margin: 15px 0;
